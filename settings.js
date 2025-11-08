@@ -1,0 +1,2 @@
+export const serverBackendUrl=process.env.REACT_APP_SERVER_URL
+export const serverFrontendUrl=process.env.REACT_APP_CLIENT_URL
