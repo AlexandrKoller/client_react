@@ -12,9 +12,9 @@ export default function UserFile({
   dateLastDownLoad,
   name,
 }) {
-  const urlByGetFile = import.meta.env.VITE_СLIENT_URL + `file/download_anon/${loadcode}/`;
   const [error, setError] = useState();
-  const url = import.meta.env.VITE_APP_SERVER_URL+ `file/${id}/`;
+  const url = import.meta.env.VITE_APP_SERVER_URL + `file/${id}/`;
+  const urlByGetFile = import.meta.env.VITE_СLIENT_URL + `file/download_anon/${loadcode}/`;
   const [texts, setTexts] = useState({
     Name: name,
     FileDescription: fileDescription,
