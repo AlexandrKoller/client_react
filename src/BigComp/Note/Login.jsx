@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { serverBackendUrl } from "../../../settings";
 import { useLocation, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setALL } from "../../../contexts/redux/actions";
@@ -12,8 +11,8 @@ export default function FormLogin() {
   const [saveMarker, setSaveMarker] = useState(false);
   const [error, setError] = useState();
   const [errorMassage, setErrorMassage] = useState();
-  const url = serverBackendUrl + "api-token-auth/";
-  const urlGetUser = serverBackendUrl + "user/";
+  const url = import.meta.env.VITE_APP_SERVER_URL + "api-token-auth/";
+  const urlGetUser = import.meta.env.VITE_APP_SERVER_URL + "user/";
   const location = useLocation();
   const pathname = location.pathname;
   const items = useSelector((state) => state.user_list);
@@ -31,7 +30,7 @@ export default function FormLogin() {
       });
       let resultToken = await response.json();
       if (resultToken.non_field_errors) {
-        setErrorMassage(<div>Пароль похоже не верный, попробуйте еще раз</div>);
+        setErrorMassage(<div className="alert alert-warning" role="alert">Пароль похоже не верный, попробуйте еще раз</div>);
       }
       if (!response.ok) {
         throw new Error(response.statusText);

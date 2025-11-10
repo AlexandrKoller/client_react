@@ -1,7 +1,6 @@
 import { useState } from "react";
 import CopyButtonWithFeedback from "../../SmallComp/CopyButton.jsx";
 import CallAreaOfChange from "../../SmallComp/callChangeArea.jsx";
-import { serverFrontendUrl, serverBackendUrl } from "../../../settings.js";
 import { useSelector, useDispatch } from "react-redux";
 import { setFILE_COUNT } from "../../../contexts/redux/actions.js";
 
@@ -13,9 +12,9 @@ export default function UserFile({
   dateLastDownLoad,
   name,
 }) {
-  const urlByGetFile = serverFrontendUrl + `file/download_anon/${loadcode}/`;
+  const urlByGetFile = import.meta.env.VITE_СLIENT_URL + `file/download_anon/${loadcode}/`;
   const [error, setError] = useState();
-  const url = serverBackendUrl + `file/${id}/`;
+  const url = import.meta.env.VITE_APP_SERVER_URL+ `file/${id}/`;
   const [texts, setTexts] = useState({
     Name: name,
     FileDescription: fileDescription,
@@ -32,6 +31,7 @@ export default function UserFile({
           "Content-Type": "application/json;charset=utf-8",
         },
       });
+      console.log(response.status)
       if (!response.ok) {
         throw new Error(response.statusText);
       }
@@ -63,7 +63,7 @@ export default function UserFile({
     let loadData;
     let blob;
     if (!items.token) {
-      loadURL = serverBackendUrl + `file/download_anon/`;
+      loadURL = import.meta.env.VITE_APP_SERVER_URL+ `file/download_anon/`;
       loadData = {
         method: "POST",
         headers: {

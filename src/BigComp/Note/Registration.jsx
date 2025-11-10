@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { serverBackendUrl } from "../../../settings";
 import { useLocation, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setALL } from "../../../contexts/redux/actions";
@@ -15,8 +14,8 @@ export default function FormRegistration() {
   const [saveMarker, setSaveMarker] = useState(false);
   const [error, setError] = useState();
   const [errorMassage, setErrorMassage] = useState();
-  const urlGetUser = serverBackendUrl + "user/";
-  const urlGetToken = serverBackendUrl + "api-token-auth/";
+  const urlGetUser = import.meta.env.VITE_APP_SERVER_URL + "user/";
+  const urlGetToken = import.meta.env.VITE_APP_SERVER_URL + "api-token-auth/";
   const location = useLocation();
   const pathname = location.pathname;
   const items = useSelector((state) => state.user_list);
@@ -35,14 +34,14 @@ export default function FormRegistration() {
     const regExPassword =
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{6,20}$/.test(form.password);
     const regExEmail =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,50}$/.test(form.email);
+      /^[a-zA-Z0-9._%+-]+@{1}[a-zA-Z0-9-]+\.{1}[a-zA-Z]{2,}$/.test(form.email);
     if (!regExUserName) {
-      setErrorMassage(<div>Имя содержит недопустимые символы</div>);
+      setErrorMassage(<div className="alert alert-warning" role="alert">Имя содержит недопустимые символы</div>);
       return;
     }
     if (!regExPassword) {
       setErrorMassage(
-        <div>
+        <div className="alert alert-warning" role="alert">
           Пароль должен быть длиной не менее 6 символов, содержать комбинацию
           прописных и строчных букв, цифр и специальных символов
         </div>,
@@ -50,7 +49,7 @@ export default function FormRegistration() {
       return;
     }
     if (!regExEmail) {
-      setErrorMassage(<div>Введите коррректный Email</div>);
+      setErrorMassage(<div className="alert alert-warning" role="alert">Введите коррректный Email</div>);
       return;
     }
     try {
@@ -61,7 +60,6 @@ export default function FormRegistration() {
         },
         body: JSON.stringify(form),
       });
-
       if (!response.ok) {
         throw new Error(response.statusText);
       }

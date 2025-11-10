@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { serverBackendUrl } from "../../../settings";
 import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Navigate } from "react-router-dom";
 import Member from "./member_card";
@@ -10,7 +9,7 @@ export default function Members() {
   const pathname = location.pathname;
   const items = useSelector((state) => state.user_list);
   const dispatch = useDispatch();
-  const urlGetUsers = serverBackendUrl + "/user";
+  const urlGetUsers = import.meta.env.VITE_APP_SERVER_URL + "/user";
 
   useEffect(() => {
     if (!items.is_staff) return;

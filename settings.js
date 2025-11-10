@@ -1,2 +1,2 @@
-export const serverBackendUrl=process.env.REACT_APP_SERVER_URL
-export const serverFrontendUrl=process.env.REACT_APP_CLIENT_URL
+export const serverBackendUrl='http://127.0.0.1:8000/'
+export const serverFrontendUrl='http://localhost:5173/'

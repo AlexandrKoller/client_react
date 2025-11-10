@@ -1,7 +1,5 @@
 import { useState, useRef } from "react";
-import { serverBackendUrl } from "../../../settings.js";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 
 export default function FileUpLoader(files, setfiles) {
   const [form, setForm] = useState({
@@ -10,13 +8,21 @@ export default function FileUpLoader(files, setfiles) {
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [error, setError] = useState();
-  const url = serverBackendUrl + "file/";
+  const url = import.meta.env.VITE_APP_SERVER_URL + "file/";
   const ref = useRef(null);
   const items = useSelector((state) => state.user_list);
   const dispatch = useDispatch();
+  const [errorMassage, setErrorMassage] = useState();
 
   const onFileUpload = async () => {
     if (!selectedFile) return;
+    if (selectedFile.size > import.meta.env.VITE_MAX_FILE_SIZE) {
+      setErrorMassage(<div>Превышен допустимый размер файла</div>)
+      return
+    }
+    if(!import.meta.env.VITE_APPROVED_FILE.includes(selectedFile.name.split('.').pop())){
+      setErrorMassage(<div className="alert alert-warning" role="alert">Недопустимый формат файла</div>)
+    }
     const formData = new FormData();
     if (form.fileName) {
       if (form.fileName.lastIndexOf(".") == -1) {
@@ -54,7 +60,7 @@ export default function FileUpLoader(files, setfiles) {
   return (
     <>
       {/* <!-- Кнопка-триггер модального окна --> */}
-      <button
+      <div><button
         type="button"
         className="btn btn-dark"
         data-bs-toggle="modal"
@@ -62,6 +68,8 @@ export default function FileUpLoader(files, setfiles) {
       >
         Загрузить файл
       </button>
+      {errorMassage}
+      </div>
       {/* <!-- Модальное окно --> */}
       <div
         className="modal fade"

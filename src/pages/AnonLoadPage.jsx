@@ -1,11 +1,10 @@
 import UserFile from "../BigComp/Files/File";
-import { serverBackendUrl } from "../../settings";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 
 export const AnonDownLoad = () => {
-  const urlGetfiles = serverBackendUrl + "file/download_anon/";
+  const urlGetfiles = import.meta.env.VITE_APP_SERVER_URL + "file/download_anon/";
   let params = useParams();
   const [file, setFiles] = useState({});
   const loadJson = {

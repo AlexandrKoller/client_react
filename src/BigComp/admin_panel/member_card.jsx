@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { serverBackendUrl } from "../../../settings";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -25,7 +24,7 @@ export default function Member(params) {
   const [error, setError] = useState();
   const items = useSelector((state) => state.user_list);
   const dispatch = useDispatch();
-  const url = serverBackendUrl + `user/${user.id}/`;
+  const url = import.meta.env.VITE_APP_SERVER_URL + `user/${user.id}/`;
 
   const removeChangesHandler = () => {
     setUser({
