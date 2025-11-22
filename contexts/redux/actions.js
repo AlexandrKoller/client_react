@@ -29,6 +29,6 @@ export function setALL(user, token) {
     return {type: SET_ALL, payload: {...user, ...token}};
     }
 
-export function setFILE_COUNT(file_count) {
-    return {type: SET_FILE_COUNT, payload: file_count};
+export function setFILE_COUNT(file_count, size_storage) {
+    return {type: SET_FILE_COUNT, payload: {file_count: file_count, size_storage: size_storage}};
         }

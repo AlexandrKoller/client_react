@@ -1,8 +1,8 @@
-import { TokenContext } from "../../contexts/TokenContext";
+import { TokenContext } from "../../../contexts/TokenContext";
 import { useContext, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setALL } from "../../contexts/redux/actions";
+import { setALL } from "../../../contexts/redux/actions";
 
 export default function Exit() {
   const location = useLocation();

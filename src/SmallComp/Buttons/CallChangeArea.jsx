@@ -43,12 +43,12 @@ export default function CallAreaOfChange({ keyT, saveResponseFunction, tx }) {
       <div className="collapse" id={keyT}>
         <div className="mb-3">
           <label
-            htmlFor="exampleFormControlTextarea1"
+            htmlFor={keyT}
             className="form-label"
           ></label>
           <textarea
             className="form-control"
-            id="exampleFormControlTextarea1"
+            id={keyT}
             rows="3"
             onChange={(e) => {
               someText[keyT] = e.target.value;

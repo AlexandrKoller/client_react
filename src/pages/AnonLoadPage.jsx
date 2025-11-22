@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
 
+
 export const AnonDownLoad = () => {
   const urlGetfiles = import.meta.env.VITE_APP_SERVER_URL + "file/download_anon/";
   let params = useParams();
   const [file, setFiles] = useState({});
+  const [error, setError] = useState();
   const loadJson = {
     loadcode: params.loadcode,
     info: true,
@@ -16,15 +18,22 @@ export const AnonDownLoad = () => {
 
   useEffect(() => {
     (async () => {
-      let res = await fetch(urlGetfiles, {
+      try {
+        let res = await fetch(urlGetfiles, {
         method: "POST",
         body: JSON.stringify(loadJson),
         headers: {
           "Content-Type": "application/json;charset=utf-8",
         },
       });
+      if (!res.ok) {
+        throw new Error(res.status);
+      }
       let res1 = await res.json();
-      setFiles(res1);
+      setFiles(res1)
+      } catch (e) {
+        setError(e)
+      };
     })();
     return;
   }, []);
@@ -38,6 +47,7 @@ export const AnonDownLoad = () => {
   ) {
     return <Navigate to="*" state={{ from: pathname }} />;
   }
+  if (error) return <HttpError code={error.message}/>
   return (
     <div>
       <UserFile

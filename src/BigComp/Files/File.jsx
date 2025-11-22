@@ -1,8 +1,10 @@
 import { useState } from "react";
-import CopyButtonWithFeedback from "../../SmallComp/CopyButton.jsx";
-import CallAreaOfChange from "../../SmallComp/callChangeArea.jsx";
+import CopyButtonWithFeedback from "../../SmallComp/Buttons/CopyButton.jsx";
+import CallAreaOfChange from "../../SmallComp/Buttons/CallChangeArea.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import { setFILE_COUNT } from "../../../contexts/redux/actions.js";
+import DestroyButton from "../../SmallComp/Buttons/DestroyButton.jsx";
+import HttpError from "../../SmallComp/Errors/BaseError.jsx";
 
 export default function UserFile({
   id,
@@ -11,17 +13,20 @@ export default function UserFile({
   dateUpload,
   dateLastDownLoad,
   name,
+  size,
+  files, 
+  setFiles
 }) {
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
   const url = import.meta.env.VITE_APP_SERVER_URL + `file/${id}/`;
-  const urlByGetFile = import.meta.env.VITE_СLIENT_URL + `file/download_anon/${loadcode}/`;
+  const urlByGetFile = import.meta.env.VITE_CLIENT_URL+ `file/download_anon/${loadcode}/`;
   const [texts, setTexts] = useState({
     Name: name,
     FileDescription: fileDescription,
   });
   const items = useSelector((state) => state.user_list);
   const dispatch = useDispatch();
-
+  
   const deleteFile = async () => {
     try {
       let response = await fetch(url, {
@@ -31,11 +36,11 @@ export default function UserFile({
           "Content-Type": "application/json;charset=utf-8",
         },
       });
-      console.log(response.status)
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      dispatch(setFILE_COUNT(items.file_count - 1));
+      dispatch(setFILE_COUNT(items.file_count - 1, items.size_storage - size));
+      setFiles(files.filter(item => item.id != id))
     } catch (e) {
       if (e instanceof Error) setError(e);
     }
@@ -63,7 +68,7 @@ export default function UserFile({
     let loadData;
     let blob;
     if (!items.token) {
-      loadURL = import.meta.env.VITE_APP_SERVER_URL+ `file/download_anon/`;
+      loadURL = import.meta.env.VITE_APP_SERVER_URL + `file/download_anon/`;
       loadData = {
         method: "POST",
         headers: {
@@ -83,8 +88,15 @@ export default function UserFile({
         },
       };
     }
-    let response = await fetch(loadURL, loadData);
-    blob = await response.blob();
+    try {
+      let response = await fetch(loadURL, loadData);
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      blob = await response.blob();
+    } catch (e) {
+      setError(e)
+    }
     let urlLoad = URL.createObjectURL(blob);
     let a = document.createElement("a");
     a.download = name;
@@ -94,21 +106,22 @@ export default function UserFile({
       URL.revokeObjectURL(urlLoad);
     }, 500);
   };
+  if (error) return <HttpError code={error.message}/>
   if (items.token) {
     return (
       <>
-        <div className="card" style={{ width: "24rem" }}>
+        <div className="card" style={{ width: "24rem", margin: '1rem' }}>
           {/* <img src="..." className="card-img-top" alt="..."/> */}
           <div className="card-body">
             <h5 className="card-title">{texts["Name"]}</h5>
             <CallAreaOfChange
-              keyT={"Name"}
+              keyT={`Name${id}`}
               saveResponseFunction={changeFile}
               tx={texts}
             />
             <p className="card-text">Описание:{texts["FileDescription"]}</p>
             <CallAreaOfChange
-              keyT={"FileDescription"}
+              keyT={`FileDescription${id}`}
               saveResponseFunction={changeFile}
               tx={texts}
               tfc={setTexts}
@@ -133,13 +146,7 @@ export default function UserFile({
               </footer>
               <CopyButtonWithFeedback textToCopy={urlByGetFile} />
             </blockquote>
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={deleteFile}
-            >
-              Удалить файл
-            </button>
+            <DestroyButton name={texts.Name} id={id} handler={deleteFile}/>
           </div>
         </div>
       </>

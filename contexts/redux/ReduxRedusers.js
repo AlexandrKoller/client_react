@@ -7,7 +7,9 @@ let initialState = {
     fist_name: '',
     email: '',
     is_staff: false,
-    file_count: 0
+    file_count: 0,
+    size_storage: 0
+
 }
 
 export const userReducer = (state = initialState, action) => {
@@ -37,11 +39,6 @@ export const userReducer = (state = initialState, action) => {
                 ...state,
                 email: action.payload
             }
-        case SET_FILE_COUNT:
-            return{
-                ...state,
-                file_count: action.payload
-            }
         case SET_IS_STAFF:
             return{
                 ...state,
@@ -55,8 +52,16 @@ export const userReducer = (state = initialState, action) => {
                 first_name: action.payload.first_name,
                 last_name: action.payload.last_name,
                 email: action.payload.email,
-                is_staff: action.payload.is_staff
+                is_staff: action.payload.is_staff,
+                file_count: action.payload.FileCount,
+                size_storage: action.payload.SizeStorage
             }
+            case SET_FILE_COUNT:
+                return{
+                    ...state,
+                    file_count: action.payload.file_count,
+                    size_storage: action.payload.size_storage
+                }
         default:
             return state
     }

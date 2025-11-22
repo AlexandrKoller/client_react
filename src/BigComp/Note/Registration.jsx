@@ -53,6 +53,7 @@ export default function FormRegistration() {
       return;
     }
     try {
+      console.log(form)
       let response = await fetch(urlGetUser, {
         method: "POST",
         headers: {

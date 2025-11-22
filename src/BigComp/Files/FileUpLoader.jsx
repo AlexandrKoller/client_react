@@ -1,28 +1,32 @@
 import { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { setFILE_COUNT } from "../../../contexts/redux/actions";
+import HttpError from "../../SmallComp/Errors/BaseError.jsx";
 
-export default function FileUpLoader(files, setfiles) {
+export default function FileUpLoader({files, setFiles}) {
   const [form, setForm] = useState({
     fileName: "",
     description: "",
   });
   const [selectedFile, setSelectedFile] = useState(null);
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
   const url = import.meta.env.VITE_APP_SERVER_URL + "file/";
   const ref = useRef(null);
-  const items = useSelector((state) => state.user_list);
+  const items = useSelector(state => state.user_list);
   const dispatch = useDispatch();
   const [errorMassage, setErrorMassage] = useState();
 
   const onFileUpload = async () => {
     if (!selectedFile) return;
     if (selectedFile.size > import.meta.env.VITE_MAX_FILE_SIZE) {
-      setErrorMassage(<div>Превышен допустимый размер файла</div>)
+      setErrorMassage(<div className="alert alert-warning" role="alert">Превышен допустимый размер файла</div>)
       return
     }
     if(!import.meta.env.VITE_APPROVED_FILE.includes(selectedFile.name.split('.').pop())){
       setErrorMassage(<div className="alert alert-warning" role="alert">Недопустимый формат файла</div>)
+      return
     }
+    setErrorMassage(null)
     const formData = new FormData();
     if (form.fileName) {
       if (form.fileName.lastIndexOf(".") == -1) {
@@ -51,16 +55,20 @@ export default function FileUpLoader(files, setfiles) {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      selectedFile(null);
-      dispatch(items.file_count + 1);
+      newfile.size = selectedFile.size
+      let newFiles = [...files, newfile]
+      setFiles(newFiles)
+      setSelectedFile(null)
+      dispatch(setFILE_COUNT(items.file_count + 1, items.size_storage + selectedFile.size));
     } catch (e) {
       if (e instanceof Error) setError(e);
     }
   };
+  if (error) return <HttpError code={error.message}/>
   return (
     <>
       {/* <!-- Кнопка-триггер модального окна --> */}
-      <div><button
+      <div style={{marginTop: '10px'}}><button
         type="button"
         className="btn btn-dark"
         data-bs-toggle="modal"
@@ -140,7 +148,6 @@ export default function FileUpLoader(files, setfiles) {
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 onClick={() => {
-                  ref.current.value = "";
                   setForm({ fileName: "", description: "" });
                   setSelectedFile(null);
                 }}
@@ -151,7 +158,9 @@ export default function FileUpLoader(files, setfiles) {
                 type="button"
                 className="btn btn-primary"
                 data-bs-dismiss="modal"
-                onClick={onFileUpload}
+                onClick={()=> {
+                  onFileUpload()
+                  ref.current.value = ""}}
               >
                 Загрузить
               </button>

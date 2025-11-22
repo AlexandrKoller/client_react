@@ -3,7 +3,7 @@ import FormRegistration from "./BigComp/Note/Registration.jsx";
 import FormLogin from "./BigComp/Note/Login.jsx";
 import { Layout } from "./BigComp/Layout/Layout.jsx";
 import { Home } from "./pages/Home.jsx";
-import Exit from "./SmallComp/Exit.jsx";
+import Exit from "./SmallComp/Buttons/Exit.jsx";
 import Files from "./BigComp/Files/Files.jsx";
 import { NotFound } from "./pages/NoteFond.jsx";
 import { AnonDownLoad } from "./pages/AnonLoadPage.jsx";
@@ -37,7 +37,7 @@ export default function App() {
                 <Route path="/exit" element={<Exit />} />
                 <Route path="/file/download_anon/:loadcode" element={<AnonDownLoad />} />
                 <Route path="/members" element={<Members />}/>
-                <Route path="/memberfiles" element={<Files />}/>
+                <Route path="/memberfiles/:id" element={<Files />}/>
                 {/* <Route path="/memberfiles" element={<Files />}/>
                 <Route path="*" element={<NotFound />} /> */}
                 <Route path="*" element={<NotFound />} /> 

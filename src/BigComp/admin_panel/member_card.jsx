@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import DestroyButton from "../../SmallComp/Buttons/DestroyButton";
 
 export default function Member(params) {
   const id = params.id;
@@ -21,9 +22,8 @@ export default function Member(params) {
     size_storage: params.SizeStorage,
     file_count: params.FileCount,
   });
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
   const items = useSelector((state) => state.user_list);
-  const dispatch = useDispatch();
   const url = import.meta.env.VITE_APP_SERVER_URL + `user/${user.id}/`;
 
   const removeChangesHandler = () => {
@@ -67,9 +67,8 @@ export default function Member(params) {
       if (!response.ok) {
         throw new Error(response.statusText);
       }
-      console.log(response.json)
+      params.setUsers(params.users.filter(item => item.id != id))
     } catch (e) {
-      console.log(e)
       if (e instanceof Error) setError(e);
     }
   };
@@ -93,6 +92,7 @@ export default function Member(params) {
       );
     }
   };
+  if (error) return <HttpError code={error.message}/>
   return (
     <>
       <div className="card" style={{ width: "36rem" }}>
@@ -153,16 +153,10 @@ export default function Member(params) {
           >
             Сохранить
           </button>
-          <button
-            type="button"
-            className="btn btn-outline-dark"
-            onClick={deleteMember}
-          >
-            Удалить
-          </button>
+          <DestroyButton handler={deleteMember} id={id} name={username}/>
           <Link
-            to={"/memberfiles"}
-            state={{ path: `file/${user.id}/memberfiles/` }}
+            to={`/memberfiles/${user.id}`}
+            state={{ path: `${user.id}` }}
             role="button"
             className="btn btn-outline-dark"
             label={"К хранилищу"}
