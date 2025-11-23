@@ -16,6 +16,7 @@ export default function UserFile({
   size,
   files, 
   setFiles
+  
 }) {
   const [error, setError] = useState(null);
   const url = import.meta.env.VITE_APP_SERVER_URL + `file/${id}/`;
