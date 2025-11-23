@@ -2,6 +2,7 @@ import UserFile from "../BigComp/Files/File";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useLocation, Navigate } from "react-router-dom";
+import HttpError from "../SmallComp/Errors/BaseError";
 
 
 export const AnonDownLoad = () => {
