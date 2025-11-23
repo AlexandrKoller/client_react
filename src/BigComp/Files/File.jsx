@@ -58,6 +58,7 @@ export default function UserFile({
       if (!response.ok) {
         throw new Error(response.statusText);
       }
+      console.log(value)
       setTexts(value);
     } catch (e) {
       if (e instanceof Error) setError(e);
@@ -115,13 +116,13 @@ export default function UserFile({
           <div className="card-body">
             <h5 className="card-title">{texts["Name"]}</h5>
             <CallAreaOfChange
-              keyT={`Name${id}`}
+              keyT={`Name`}
               saveResponseFunction={changeFile}
               tx={texts}
             />
             <p className="card-text">Описание:{texts["FileDescription"]}</p>
             <CallAreaOfChange
-              keyT={`FileDescription${id}`}
+              keyT={`FileDescription`}
               saveResponseFunction={changeFile}
               tx={texts}
               tfc={setTexts}

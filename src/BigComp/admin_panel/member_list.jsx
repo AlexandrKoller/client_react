@@ -9,7 +9,7 @@ export default function Members() {
   const location = useLocation();
   const pathname = location.pathname;
   const items = useSelector((state) => state.user_list);
-  const urlGetUsers = import.meta.env.VITE_APP_SERVER_URL + "/user";
+  const urlGetUsers = import.meta.env.VITE_APP_SERVER_URL + "user/";
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
