@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useLocation, Navigate } from "react-router-dom";
 import Member from "./member_card";
 import LoadingComp from "../../pages/LoadingPage";
+import HttpError from "../../SmallComp/Errors/BaseError";
 
 export default function Members() {
   const [users, setUsers] = useState([]);

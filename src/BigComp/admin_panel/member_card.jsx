@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import DestroyButton from "../../SmallComp/Buttons/DestroyButton";
+import HttpError from "../../SmallComp/Errors/BaseError";
 
 export default function Member(params) {
   const id = params.id;
